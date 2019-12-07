@@ -1,0 +1,54 @@
+<style>
+#kort {
+  width: 100%;
+  height: 755px;
+}
+</style>
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyCrvECKXyuCwA5sBu0ld4MI8fGyvLs3kxE"></script>
+<script>
+function visPosition() {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(visKort, visFejl);
+    } else {
+        alert("Din browser understøtter ikke dette element");
+    }
+}
+
+// Definerer funktionen når den bliver kaldt succesfuldt.
+function visKort(position) {
+    // Får lokations dataen
+    lat = position.coords.latitude;
+    long = position.coords.longitude;
+    let latlong = new google.maps.LatLng(lat, long);
+
+    let mineIndstillinger = {
+        center: latlong,
+        zoom: 10,
+        mapTypeControl: true,
+        navigationControlOptions: {
+            style:google.maps.NavigationControlStyle.SMALL
+        }
+    }
+
+    let map = new google.maps.Map(document.getElementById("kort"), mineIndstillinger);
+    let marker = new google.maps.Marker({ position:latlong, map:map, title:"Du er her" });
+}
+
+// Definerer fejlene der kan opstå når funktionen bliver kaldt.
+function visFejl(error) {
+    if(error.code == 1) {
+        result.innerHTML = "Du vil ikke dele din position.";
+    } else if(error.code == 2) {
+        result.innerHTML = "Netværket er nede.";
+    } else if(error.code == 3) {
+        result.innerHTML = "Timed out.";
+    } else {
+        result.innerHTML = "Ukendt Fejl.";
+    }
+}
+</script>
+
+
+<div id="kort">
+      <button type="button" onclick="visPosition">Vis min bils position</button>
+</div>
